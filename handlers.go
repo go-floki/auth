@@ -1,8 +1,8 @@
 package auth
 
 import (
-	"github.com/frogprog/floki"
-	"testGo/src/sessions"
+	"github.com/go-floki/floki"
+	"github.com/go-floki/sessions"
 )
 
 type UserStore interface {

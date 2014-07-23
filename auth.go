@@ -3,9 +3,9 @@ package auth
 import (
 	"log"
 	//"net/http"
-	"github.com/frogprog/floki"
+	"github.com/go-floki/floki"
+	"github.com/go-floki/sessions"
 	"github.com/jameskeane/bcrypt"
-	"testGo/src/sessions"
 )
 
 const (
