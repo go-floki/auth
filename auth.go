@@ -20,6 +20,11 @@ type User interface {
 	GetRole() int
 }
 
+type UserStore interface {
+	FindByName(name string) User
+	Create(user OauthProfile) User
+}
+
 func SetUser(c *floki.Context, user User) {
 	session := sessions.Get(c)
 	session.Set("user", user)
@@ -40,7 +45,15 @@ func Auth(neededRole int, redirectUrl string) floki.HandlerFunc {
 
 		if userValue != nil {
 			user := userValue.(User)
-			role = user.GetRole()
+
+			if HasToRefresh(user.GetName()) {
+				session.Delete("user")
+				c.Redirect("/login")
+				return
+
+			} else {
+				role = user.GetRole()
+			}
 
 		} else {
 			//l.Println("user not logged in!")
@@ -50,8 +63,6 @@ func Auth(neededRole int, redirectUrl string) floki.HandlerFunc {
 			c.Next()
 		} else {
 			c.Redirect("/login")
-
-			//c.Response().Redirect(302, redirectUrl)
 		}
 	}
 }
